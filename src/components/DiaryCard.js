@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
-export default function DiaryCard({ title, date, preview, moodSource }) {
+export default function DiaryCard({ title, date, preview, moodSource, borderColor }) {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { borderColor: borderColor || '#e5e7eb' }]}>
       <Image source={moodSource} style={styles.mood} />
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={1}>
@@ -27,8 +27,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     padding: 12,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderWidth: 2, // Ditebalkan sedikit agar warna border terlihat jelas
     borderRadius: 12,
     marginBottom: 12,
   },
