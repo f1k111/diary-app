@@ -1,6 +1,6 @@
-# Modul Praktikum 3 Mobile Programming: Diary App (Layout Responsif & Modal)
+# Modul Praktikum 4 Mobile Programming: Diary App (Props & State)
 
-Aplikasi **Buku Harian (Diary App)** berbasis React Native dengan Expo CLI. Proyek ini merupakan kelanjutan dari Modul 2, dengan penambahan fitur tata letak responsif, sistem *design tokens*, dan modal detail yang interaktif.
+Aplikasi **Buku Harian (Diary App)** berbasis React Native dengan Expo CLI. Proyek ini merupakan kelanjutan dari Modul 3, dengan penambahan fitur dinamis menggunakan pengelolaan Props dan State (Pencarian, Like, dan Form Tambah Entri).
 
 ---
 
@@ -13,27 +13,22 @@ Aplikasi **Buku Harian (Diary App)** berbasis React Native dengan Expo CLI. Proy
 
 ---
 
-## ✨ Fitur Baru (Pembaruan Modul 3)
+## ✨ Fitur Baru (Pembaruan Modul 4)
 
-Sesuai dengan spesifikasi pada Modul Praktikum 03, aplikasi ini telah mengimplementasikan beberapa pembaruan utama:
-1. **Sistem Design Tokens (`tokens.js`):** Pemusatan pengaturan gaya (style) seperti warna dasar (surface, text, accent), jarak (spacing), ukuran huruf (typography), dan radius. Hal ini membuat UI aplikasi jauh lebih konsisten.
-2. **Layout Responsif (`FlatList`):** Daftar entri buku harian secara dinamis beradaptasi dengan ukuran layar perangkat:
-   - **1 Kolom:** Untuk layar smartphone standar (mode Portrait).
-   - **2 Kolom:** Untuk layar dengan lebar $\ge$ 600px (Tablet atau mode Landscape).
-3. **Komponen Interaktif (`Pressable`):** Kartu entri (`DiaryCard`) sekarang dapat merespons sentuhan pengguna dengan memberikan efek visual saat ditekan.
-4. **Modal Detail (`DiaryDetailModal`):** Menampilkan detail lengkap entri (termasuk *hero image* yang proporsional 16:9 dan isi catatan penuh) dalam sebuah *pop-up* (Modal) saat pengguna menekan salah satu kartu.
-5. **Aksesibilitas Dasar:** Penambahan atribut `accessibilityLabel` pada kartu interaktif untuk mendukung *screen reader*.
-6. **Integrasi Status Bar & Safe Area:** Menggunakan `StatusBar` dari Expo agar jam dan ikon baterai pada HP terlihat jelas, serta area UI yang aman di dalam layar.
+1. **Pencarian Entri (SearchBar):** Pengguna dapat mencari catatan berdasarkan judul, isi, atau tanggal.
+2. **Fitur Suka (Like):** Pengguna dapat menekan tombol hati (🤍 menjadi ❤️) pada setiap kartu catatan.
+3. **Form Tambah Entri (EntryForm):** Pengguna dapat menambahkan catatan baru secara langsung tanpa perlu me-restart aplikasi. Entri baru akan otomatis muncul di daftar teratas.
 
 ---
 
-## 💡 Penjelasan Breakpoint 600px (Layout Responsif)
+## 💡 Penjelasan Penggunaan Props dan State
 
-Perubahan tata letak (layout) aplikasi dari 1 kolom menjadi 2 kolom diatur secara dinamis menggunakan *hook* `useWindowDimensions` dari React Native. Hook ini bertugas membaca dimensi lebar layar (`width`) perangkat secara otomatis dan *real-time*. 
+Pada pembaruan Modul 4 ini, aplikasi menggunakan dua konsep utama React Native untuk mengelola aliran data:
 
-Jika lebar layar perangkat berada di bawah **600px** (misalnya pada smartphone dalam mode berdiri/portrait), variabel pengecekan layout bernilai `false`, sehingga komponen `FlatList` akan merender data dalam **1 kolom** penuh.
-
-Namun, jika lebar layar terdeteksi mencapai **600px atau lebih** (misalnya saat smartphone diputar ke mode miring/landscape, atau diakses melalui tablet), variabel pengecekan bernilai `true`. Hal ini secara otomatis mengubah properti `numColumns` pada `FlatList` menjadi **2**, sehingga ruang layar yang lebih lebar dapat dimanfaatkan secara optimal tanpa terlihat melar (*overflow*).
+*   **Props (Properti):** Digunakan untuk mengirim data dan aksi (fungsi) dari *parent component* ke *child component*. Pada aplikasi ini, komponen utama (`DiaryListScreen`) mengirimkan data seperti `title`, `date`, `moodImage`, serta fungsi aksi (seperti `onToggleLike` dan `onSubmit`) ke komponen anaknya (`DiaryCard`, `EntryForm`, dan `SearchBar`) melalui Props.
+*   **State:** Digunakan untuk menyimpan data internal komponen yang bersifat dinamis (dapat berubah) dan akan memicu *render ulang* pada layar saat nilainya berubah.
+    *   **Local State:** Contohnya variabel `queryText` pada `SearchBar` dan input form (`title`, `date`, `preview`) pada `EntryForm`.
+    *   **Shared / Main State:** Contohnya variabel `entries` (menyimpan seluruh data utama), `query` (kata kunci pencarian), dan `likedIds` (menyimpan ID entri yang disukai) yang diletakkan (diangkat / *lifted*) ke komponen induk (`DiaryListScreen`) agar dapat mengontrol dan didistribusikan ke komponen-komponen lainnya secara selaras.
 
 ---
 
@@ -43,16 +38,16 @@ Namun, jika lebar layar terdeteksi mencapai **600px atau lebih** (misalnya saat 
 diary-app/
 ├── assets/
 │   └── moods/
-│       └── happy.png
 ├── src/
 │   ├── components/
 │   │   ├── DiaryCard.js
-│   │   └── DiaryDetailModal.js   <-- (Baru) Komponen Modal Detail
+│   │   ├── DiaryDetailModal.js
+│   │   ├── SearchBar.js        <-- (Baru) Komponen Pencarian
+│   │   └── EntryForm.js        <-- (Baru) Komponen Form Entri
 │   ├── screens/
 │   │   └── DiaryListScreen.js
 │   └── styles/
-│       └── tokens.js             <-- (Baru) Design tokens
+│       └── tokens.js
 ├── App.js
-├── app.json
 ├── package.json
 └── README.md

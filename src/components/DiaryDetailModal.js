@@ -5,12 +5,12 @@ import { COLORS, SPACE, RADIUS, TYPO } from '../styles/tokens';
 export default function DiaryDetailModal({ visible, onClose, entry }) {
   if (!entry) return null;
 
-  const { title, date, body, preview, heroUri, moodUri, moodSource } = entry;
+  // Modul 4 menambahkan properti moodImage, kita gabungkan agar kompatibel dengan data lama
+  const { title, date, body, preview, heroUri, moodUri, moodSource, moodImage } = entry;
   
-  // Menggunakan heroUri jika ada, jika tidak pakai gambar bawaan (moodSource/moodUri)
-  const imageSource = heroUri ? { uri: heroUri } : (moodSource || { uri: moodUri });
+  // Prioritaskan moodImage (Modul 4), lalu heroUri/moodUri (Modul 3)
+  const imageSource = moodImage || (heroUri ? { uri: heroUri } : (moodSource || { uri: moodUri }));
   
-  // Menggunakan 'body' untuk teks lengkap, atau 'preview' jika belum ada
   const contentBody = body || preview;
 
   return (
